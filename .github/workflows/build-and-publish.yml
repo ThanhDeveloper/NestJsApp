@@ -10,6 +10,13 @@ on:
 jobs:
   integration-test:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: admin
+      DB_NAME_TEST: postgres
     strategy:
       matrix:
         node-version: [ 16.x ]
@@ -37,4 +44,5 @@ jobs:
         run: npm install
       - name: Integration testing
         run: |
+          env
           npm run test
