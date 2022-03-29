@@ -31,5 +31,4 @@ jobs:
             docker rmi thanhdeveloper/nest:master
             docker rmi traefik:v2.4
             docker-compose up -d
-            sudo service status nginx
             exit
