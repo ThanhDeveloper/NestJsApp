@@ -1,7 +1,9 @@
 import { Sequelize } from 'sequelize-typescript';
-import { User } from 'src/modules/users/entities/user.entity';
 import { SEQUELIZE, DEVELOPMENT, TEST, PRODUCTION } from '../constants';
 import { databaseConfig } from './database.config';
+import { User } from '../../modules/users/entities/user.entity';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 export const databaseProviders = [
   {
@@ -27,7 +29,7 @@ export const databaseProviders = [
         config.password,
         {
           host: config.host,
-          dialect: config.dialect,
+          dialect: 'postgres',
           define: {
             timestamps: false,
           },
