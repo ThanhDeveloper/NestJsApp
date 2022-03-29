@@ -29,5 +29,6 @@ jobs:
             docker-compose down
             docker rmi thanhdeveloper/nest:master
             docker rmi traefik:v2.4
+            ls
             docker-compose up --detach
             exit
