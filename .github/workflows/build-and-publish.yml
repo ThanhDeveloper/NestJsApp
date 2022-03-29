@@ -24,12 +24,10 @@ jobs:
           port: ${{ secrets.PORT }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-             exit
-#            cd nest/NestJsORM
-#            git pull
-#            docker-compose down
-#            docker rmi thanhdeveloper/nest:master
-#            docker rmi traefik:v2.4
-#            docker-compose up -d
-
-            
+            cd nest/NestJsORM
+            git pull
+            docker-compose down
+            docker rmi thanhdeveloper/nest:master
+            docker rmi traefik:v2.4
+            docker-compose up -d
+            exit
