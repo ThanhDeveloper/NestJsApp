@@ -21,9 +21,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  //@Throttle(1, 3)
-  @SkipThrottle(false)
-  @Throttle(2, 60)
   @Get()
   @UseInterceptors(TransformInterceptor, TimeoutInterceptor)
   async getAllUser() {
