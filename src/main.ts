@@ -9,5 +9,4 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidateAuthMiddleware());
   await app.listen(5001);
 }
-//1
 bootstrap();
