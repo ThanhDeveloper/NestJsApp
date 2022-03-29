@@ -10,7 +10,7 @@ import { TransformInterceptor } from '../../core/interceptors/transform-intercep
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoggedInUserDto } from './dto/logged-in-user.dto';
 import { TimeoutInterceptor } from '../../core/interceptors/timeout.interceptor';
-import { SkipThrottle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import { API_VERSION } from '../../core/constants';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
@@ -22,6 +22,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @Throttle(3, 60)
   @UseInterceptors(TransformInterceptor, TimeoutInterceptor)
   async getAllUser() {
     return await this.usersService.findAll();

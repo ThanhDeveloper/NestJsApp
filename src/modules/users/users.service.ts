@@ -19,7 +19,7 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return await this.usersRepository.findAll<User>({
-      // attributes: ['id', 'username'],
+      attributes: ['id', 'username'],
     });
   }
 
