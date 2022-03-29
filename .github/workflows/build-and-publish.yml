@@ -3,9 +3,9 @@ name: CI
 on:
   push:
     # Triggers the workflow on push events but only for the master branch
-    branches: [ staging ]
+    branches: [ master ]
   pull_request:
-    branches: [ staging ]
+    branches: [ master ]
 
 jobs:
   integration-test:
