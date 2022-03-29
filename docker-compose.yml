@@ -39,6 +39,6 @@ services:
       - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"
       - "traefik.http.routers.redirs.entrypoints=web"
       - "traefik.http.routers.redirs.middlewares=redirect-to-https"
-#    ports:
-#      - "5001:5001"
+    ports:
+      - "5001:5001"
     restart: always
