@@ -45,4 +45,4 @@ jobs:
       - name: Integration testing
         run: |
           env
-          npm run test
+#          npm run test
