@@ -26,7 +26,8 @@ jobs:
           script: |
             cd nest/NestJsORM
             git pull
+            docker-compose down
+            docker rmi thanhdeveloper/nest:master
+            docker rmi traefik:v2.4
+            docker-compose up --detach
             exit
-#            docker-compose down
-#            docker rm server-container
-#            docker-compose up --detach     

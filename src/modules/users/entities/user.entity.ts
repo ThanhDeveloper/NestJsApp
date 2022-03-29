@@ -2,7 +2,7 @@ import { Table, Column, Model, DataType } from 'sequelize-typescript';
 import { IsNotEmpty } from 'class-validator';
 import { AutoMap } from '@automapper/classes';
 
-@Table
+@Table({ timestamps: false })
 export class User extends Model<User> {
   @AutoMap()
   @Column({

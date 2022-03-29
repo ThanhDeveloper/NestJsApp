@@ -1,4 +1,4 @@
-FROM node:16-alpine as production
+FROM node:16.4.0 as production
 
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
@@ -6,9 +6,11 @@ WORKDIR /home/node/app
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install
 
 COPY . .
+
+RUN npm run build
 
 EXPOSE 5001
 
