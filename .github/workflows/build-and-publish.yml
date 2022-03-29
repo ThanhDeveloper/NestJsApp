@@ -35,11 +35,19 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-#      - name: Deploy to Digital Ocean droplet via SSH action
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.KEY }}
-#          port: ${{ secrets.PORT }}
-#          passphrase: ${{ secrets.PASSPHRASE }}
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd nest/NestJsORM
+            git pull
+#            docker-compose down
+#            docker rm server-container
+#            docker-compose up --detach
+            exit
+
