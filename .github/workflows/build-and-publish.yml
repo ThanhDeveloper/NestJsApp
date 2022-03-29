@@ -26,7 +26,7 @@ jobs:
           script: |
             cd nest/NestJsORM
             git pull
+            exit
 #            docker-compose down
 #            docker rm server-container
-#            docker-compose up --detach
-            exit
+#            docker-compose up --detach     
