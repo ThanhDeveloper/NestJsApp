@@ -32,7 +32,7 @@ services:
     container_name: nest-container
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.server-container.rule=Host(`api.molailaptrinh.com`)"
+      - "traefik.http.routers.server-container.rule=Host(`endpoint.molailaptrinh.com`)"
       - "traefik.http.routers.server-container.entrypoints=websecure"
       - "traefik.http.routers.server-container.tls.certresolver=myresolver"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"

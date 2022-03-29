@@ -25,6 +25,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd nest/NestJsORM
+            sudo rm -r letsencrypt
             git pull
             docker-compose down
             docker rmi thanhdeveloper/nest:master
