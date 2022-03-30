@@ -62,5 +62,6 @@ describe('UsersController', () => {
     const users = await controller.getAllUser();
     expect(users).not.toBe(undefined);
     expect(users[0]['dataValues']).not.toHaveProperty('password');
+    //1
   });
 });

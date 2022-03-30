@@ -1,34 +1,48 @@
-name: Docker Image CI
+name: CI
 
 on:
   push:
     # Triggers the workflow on push events but only for the master branch
-    branches: [ master ]
+    branches: [ staging ]
   pull_request:
-    branches: [ master ]
+    branches: [ staging ]
 
 jobs:
-  build_and_publish:
-    name: Build test and publish
+  integration-test:
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASS: admin
+      DB_NAME_TEST: postgres
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+    services:
+      postgres:
+        image: postgres:14.1-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-
-      - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          script: |
-            cd nest/NestJsORM
-            sudo rm -r letsencrypt
-            git pull
-            docker-compose down
-            docker rmi thanhdeveloper/nest:master
-            docker rmi traefik:v2.4
-            docker-compose up -d
-            exit
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: npm install
+      - name: Integration testing
+        run: |
+          env
+          npm run test
