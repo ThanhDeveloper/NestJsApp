@@ -3,12 +3,14 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { InvalidArgumentException } from '../../core/utils/error-handler.util';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
+    private sequelize: Sequelize,
   ) {}
 
   async validateUser(username: string, pass: string) {
@@ -27,6 +29,7 @@ export class AuthService {
     // tslint:disable-next-line: no-string-literal
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user['dataValues'];
+
     return result;
   }
 
@@ -41,31 +44,45 @@ export class AuthService {
   }
 
   public async register(user) {
-    const userExist = await this.userService.findOneByUsername(user.username);
-    if (userExist) {
-      throw new InvalidArgumentException('This username already exist');
+    let transaction;
+    try {
+      transaction = await this.sequelize.transaction();
+
+      const userExist = await this.userService.findOneByUsername(user.username);
+      if (userExist) {
+        throw new InvalidArgumentException('This username already exist');
+      }
+
+      // hash the password
+      const pass = await AuthService.hashPassword(user.password);
+
+      // create the user
+      const newUser = await this.userService.create({
+        ...user,
+        password: pass,
+      });
+      // tslint:disable-next-line: no-string-literal
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = newUser['dataValues'];
+
+      // generate token
+      const token = await this.generateToken(result);
+
+      await transaction.commit();
+
+      // return the user and the token
+      return {
+        id: result.id,
+        username: result.username,
+        message: 'Register success',
+        token,
+      };
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      throw error;
     }
-
-    // hash the password
-    const pass = await AuthService.hashPassword(user.password);
-
-    // create the user
-    const newUser = await this.userService.create({ ...user, password: pass });
-
-    // tslint:disable-next-line: no-string-literal
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = newUser['dataValues'];
-
-    // generate token
-    const token = await this.generateToken(result);
-
-    // return the user and the token
-    return {
-      id: result.id,
-      username: result.username,
-      message: 'Register success',
-      token,
-    };
   }
 
   private async generateToken(user) {
